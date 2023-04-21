@@ -11,10 +11,9 @@ const List = () => {
       const queryResult = await axios.post(Constants.GRAPHQL_API, {
         query: Constants.GET_OBJKT_QUERY,
       })
-      const result = queryResult.data.data;
 
       setLoading(false);
-      setItems({ gallery: result.gallery })
+      setItems({ gallery: queryResult.data.data.gallery })
     }
 
     fetchData()
