@@ -4,32 +4,32 @@ import * as Constants from '../../utils'
 
 const List = () => {
   const [loading, setLoading] = useState(true);
+  const [items, setItems] = useState({ gallery: [] });
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
-        const queryResult = await axios.post(Constants.GRAPHQL_API, {
-          query: Constants.GET_OBJKT_QUERY,
-        })
-        // Define the data result.
-        const result = queryResult.data.data;
-        setLoading(false);
-        console.log(result);
-      } catch {
-        throw Error('API fetch failed')
-      }
+      const queryResult = await axios.post(Constants.GRAPHQL_API, {
+        query: Constants.GET_OBJKT_QUERY,
+      })
+      const result = queryResult.data.data;
+
+      setLoading(false);
+      setItems({ gallery: result.gallery })
     }
+
     fetchData()
   }, [])
 
   return (
-    <>
+    <div>
       {loading ? (
         <p>Loading</p>
       ) : (
-        <p>Done</p>
+        items.gallery.map((item, index) => (
+          <p key={index}>{item.name}</p>
+        ))
       )}
-    </>
+    </div>
   )
 }
 
