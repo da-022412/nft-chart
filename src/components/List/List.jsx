@@ -1,35 +1,40 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import * as Constants from '../../utils'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+
+import * as Constants from '../../constants';
+
+import ListItem from './ListItem';
 
 const List = () => {
   const [loading, setLoading] = useState(true);
-  const [items, setItems] = useState({ gallery: [] });
+  const [items, setItems] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
       const queryResult = await axios.post(Constants.GRAPHQL_API, {
-        query: Constants.GET_OBJKT_QUERY,
-      })
+        query: Constants.GRAPHQL_QUERY,
+      });
 
       setLoading(false);
-      setItems({ gallery: queryResult.data.data.gallery })
-    }
+      setItems(queryResult.data.data.gallery);
+    };
 
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
+
+  console.log(items);
 
   return (
     <div>
       {loading ? (
         <p>Loading</p>
       ) : (
-        items.gallery.map((item, index) => (
-          <p key={index}>{item.name}</p>
+        items.map((item, index) => (
+          <ListItem content={item} key={index} />
         ))
       )}
     </div>
-  )
-}
+  );
+};
 
-export default List
+export default List;
